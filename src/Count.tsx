@@ -7,6 +7,7 @@ type CountPropsType = {
     value: string
     incButton: () => void
     resetButton: () => void
+    disable: boolean
 }
 
 export function Count(props: CountPropsType) {
@@ -18,22 +19,25 @@ export function Count(props: CountPropsType) {
         props.resetButton()
     }
 
-    const countError = props.number === props.maxNumber
-    || props.minNumber < 0
-    || props.minNumber >= props.maxNumber ? 'NumberError' : '';
-    const number = props.minNumber < 0 || props.minNumber >= props.maxNumber
-        ? "Incorrect value!" : props.number;
-    const incDisabled = number === props.maxNumber
-        || props.minNumber < 0
-        || props.minNumber >= props.maxNumber;
-    const resetDisabled = props.minNumber < 0 || props.number < props.maxNumber;
+    const messageError = props.minNumber < 0
+    || props.minNumber >= props.maxNumber ? 'Error!' : props.value;
+    const messageCount = props.disable ? props.number : messageError;
 
+    const colorError = messageError === 'Error!' ? 'ColorError' : 'ColorStart';
+    const colorNumber = !props.disable  ? colorError : '';
+    const colorNumberError = props.number === props.maxNumber ? 'ColorError' : ''
+
+    const incDisabled = props.number === props.maxNumber
+        || props.minNumber < 0
+        || props.minNumber >= props.maxNumber || messageCount === messageError;
+    const resetDisabled = props.minNumber < 0
+        || props.number < props.maxNumber || !props.disable;
 
     return (
         <div>
             <div className="AppInput">
                 <div className="AppInputCount">
-                    <div className={countError}>{number || props.value}</div>
+                    <div className={colorNumber || colorNumberError}>{messageCount}</div>
                 </div>
             </div>
             <div className="AppButton">

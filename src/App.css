@@ -79,11 +79,10 @@
     padding: 10px 30px;
 }
 
-.NumberError {
-    color: red
+.ColorError {
+    color: red;
 }
 
-.InputError {
-    border: 1px solid red;
-    background-color: red;
+.ColorStart {
+    color: blue;
 }

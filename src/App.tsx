@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 import {Settings} from "./Settings";
 import {Count} from "./Count";
@@ -8,22 +8,40 @@ function App() {
     const [minNumber, setMinNumber] = useState<number>(0)
     let [number, setNumber] = useState<number>(0)
     const [disable, setDisable] = useState<boolean>(false)
-    const [value, setValue] = useState<string>('start')
+    let [value, setValue] = useState<string>('Start!')
+
+    useEffect(() => {
+        debugger;
+        let getTitle = localStorage.getItem('title')
+        if (getTitle) {
+            let newTitle = JSON.parse(getTitle)
+            setMaxNumber(newTitle.maxNumber)
+            setMinNumber(newTitle.minNumber)
+            setDisable(newTitle.disable)
+            setNumber(newTitle.minNumber)
+            setValue(newTitle.value)
+        }
+    }, []);
+
+    useEffect(() => {
+        debugger;
+        localStorage.setItem('title', JSON.stringify({
+            maxNumber: maxNumber,
+            minNumber: minNumber,
+            number: minNumber,
+            value: value,
+            disable: disable
+        }))
+    }, [maxNumber, minNumber, number, disable, value]);
 
     function changeMaxNumber(number: number) {
         setMaxNumber(number)
         setDisable(false)
-        if (maxNumber >= 0) {
-            setValue(value)
-        }
     }
 
     function changeMinNumber(number: number) {
         setMinNumber(number)
         setDisable(false)
-        if (minNumber >= 0) {
-            setValue(value)
-        }
     }
 
     function changeSettings() {
@@ -66,6 +84,7 @@ function App() {
                        resetButton={resetButton}
                        minNumber={minNumber}
                        maxNumber={maxNumber}
+                       disable={disable}
                        value={value}
                        number={number}/>
             </div>
