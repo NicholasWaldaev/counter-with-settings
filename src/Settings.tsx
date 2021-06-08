@@ -1,44 +1,40 @@
 import React, {ChangeEvent} from 'react';
 import './App.css';
+import {useDispatch, useSelector} from "react-redux";
+import {StateType} from "./Store/store";
+import {changeMaxNumber, changeMinNumber, createStartNumber, InitialStateType} from "./Store/count-reducer";
 
-type SettingsPropsType = {
-    changeSettings: () => void
-    changeMaxNumber: (number: number) => void
-    changeMinNumber: (number: number) => void
-    disableButton: () => void
-    maxNumber: number
-    minNumber: number
-    disable: boolean
-}
-
-export function Settings(props: SettingsPropsType) {
+export function Settings() {
+    const dispatch = useDispatch()
+    const counter = useSelector<StateType, InitialStateType>(state => state.counter)
 
     const changeMaxInput = (e: ChangeEvent<HTMLInputElement>) => {
-            props.changeMaxNumber(Number(e.currentTarget.value))
+        dispatch(changeMaxNumber(Number(e.currentTarget.value)))
     }
 
     const changeMinInput = (e: ChangeEvent<HTMLInputElement>) => {
-            props.changeMinNumber(Number(e.currentTarget.value))
+        dispatch(changeMinNumber(Number(e.currentTarget.value)))
     }
 
     const clickSettings = () => {
-        props.changeSettings();
-        props.disableButton();
+        dispatch(createStartNumber())
     }
 
     const styleMinInput = {
         outline: "none",
-        border: props.minNumber < 0 || props.minNumber >= props.maxNumber ? "3px solid red" : '',
-        backgroundColor: props.minNumber < 0 || props.minNumber >= props.maxNumber ? "orange" : '',
+        border: counter.minNumber < 0 || counter.minNumber >= counter.maxNumber ? "3px solid red" : '',
+        backgroundColor: counter.minNumber < 0 || counter.minNumber >= counter.maxNumber ? "orange" : '',
     }
 
     const styleMaxInput = {
         outline: "none",
-        border: props.minNumber >= props.maxNumber ? "3px solid red" : '',
-        backgroundColor: props.minNumber >= props.maxNumber ? "orange" : '',
+        border: counter.minNumber >= counter.maxNumber ? "3px solid red" : '',
+        backgroundColor: counter.minNumber >= counter.maxNumber ? "orange" : '',
     }
 
-    const errorButton = props.minNumber < 0 || props.minNumber >= props.maxNumber
+    const errorButton = counter.minNumber < 0
+        || counter.minNumber >= counter.maxNumber
+        || counter.startNumber >= counter.minNumber
 
     return (
         <div>
@@ -49,7 +45,7 @@ export function Settings(props: SettingsPropsType) {
                     </div>
                     <input style={styleMaxInput}
                            onChange={changeMaxInput}
-                           value={props.maxNumber}
+                           value={counter.maxNumber}
                            type="number"/>
                 </div>
                 <div className="AppInputMain">
@@ -58,13 +54,13 @@ export function Settings(props: SettingsPropsType) {
                     </div>
                     <input style={styleMinInput}
                            onChange={changeMinInput}
-                           value={props.minNumber}
+                           value={counter.minNumber}
                            type="number"/>
                 </div>
             </div>
             <div className="AppButton">
-                <button className='ButtonCount'
-                        disabled={props.disable || errorButton}
+                <button className='ButtonItem'
+                        disabled={errorButton}
                         onClick={clickSettings}>set
                 </button>
             </div>

@@ -1,52 +1,47 @@
 import React from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {StateType} from "./Store/store";
+import {endStartNumber, incrementStartNumber, InitialStateType} from "./Store/count-reducer";
 
-type CountPropsType = {
-    number: number
-    maxNumber: number
-    minNumber: number
-    value: string
-    incButton: () => void
-    resetButton: () => void
-    disable: boolean
-}
+export function Count() {
+    const dispatch = useDispatch()
+    const counter = useSelector<StateType, InitialStateType>(state => state.counter)
 
-export function Count(props: CountPropsType) {
     const incButtonHandler = () => {
-        props.incButton()
+        dispatch(incrementStartNumber())
     }
 
     const resetButtonHandler = () => {
-        props.resetButton()
+        dispatch(endStartNumber())
     }
 
-    const messageError = props.minNumber < 0
-    || props.minNumber >= props.maxNumber ? 'Error!' : props.value;
-    const messageCount = props.disable ? props.number : messageError;
+    const colorError = counter.startNumber === 'Incorrect value!'
+    || counter.startNumber === counter.maxNumber ? 'ColorError' : ''
+    const colorSettings = counter.startNumber === 'Counter setting!' ? 'ColorStart' : ''
 
-    const colorError = messageError === 'Error!' ? 'ColorError' : 'ColorStart';
-    const colorNumber = !props.disable  ? colorError : '';
-    const colorNumberError = props.number === props.maxNumber ? 'ColorError' : ''
-
-    const incDisabled = props.number === props.maxNumber
-        || props.minNumber < 0
-        || props.minNumber >= props.maxNumber || messageCount === messageError;
-    const resetDisabled = props.minNumber < 0
-        || props.number < props.maxNumber || !props.disable;
+    const incDisabled = counter.startNumber === counter.maxNumber
+        || counter.minNumber < 0
+        || counter.minNumber >= counter.maxNumber
+        || counter.startNumber === counter.value
+    const resetDisabled = counter.minNumber < 0
+        || counter.startNumber < counter.maxNumber
+        || counter.minNumber >= counter.maxNumber
+        || counter.startNumber === counter.value
 
     return (
         <div>
-            <div className="AppInput">
-                <div className="AppInputCount">
-                    <div className={colorNumber || colorNumberError}>{messageCount}</div>
+            <div className='AppInput'>
+                <div className='AppInputCount'>
+                    <div className={colorError || colorSettings}>{counter.startNumber}</div>
                 </div>
             </div>
-            <div className="AppButton">
-                <div className="ButtonSettings">
-                    <button className="ButtonInc"
+            <div className='AppButton'>
+                <div className='ButtonCount'>
+                    <button className='ButtonItem'
                             disabled={incDisabled}
                             onClick={incButtonHandler}>inc
                     </button>
-                    <button className="ButtonReset"
+                    <button className='ButtonItem'
                             disabled={resetDisabled}
                             onClick={resetButtonHandler}>reset
                     </button>
@@ -55,3 +50,5 @@ export function Count(props: CountPropsType) {
         </div>
     )
 }
+
+

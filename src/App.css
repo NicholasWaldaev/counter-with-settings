@@ -43,40 +43,22 @@
     border: 3px solid yellow;
     border-radius: 10px;
     width: 450px;
-    min-height: 50px;
     margin: 0 auto 20px;
+    padding: 10px 0;
     text-align: center;
 }
 
 .ButtonCount {
-    border: none;
-    border-radius: 10px;
-    margin: 10px 0;
-    padding: 10px 30px;
-    background-color: yellow;
-    font-size: 20px;
-}
-
-.ButtonSettings {
-    margin: 10px 0;
     display: flex;
     justify-content: space-around;
 }
 
-.ButtonInc {
-    border: none;
-    border-radius: 10px;
-    background-color: yellow;
+.ButtonItem {
     font-size: 20px;
     padding: 10px 30px;
-}
-
-.ButtonReset {
+    background-color: yellow;
     border: none;
     border-radius: 10px;
-    background-color: yellow;
-    font-size: 20px;
-    padding: 10px 30px;
 }
 
 .ColorError {
