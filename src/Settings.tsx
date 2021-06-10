@@ -1,24 +1,30 @@
-import React, {ChangeEvent} from 'react';
+import React from 'react';
 import './App.css';
 import {useDispatch, useSelector} from "react-redux";
 import {StateType} from "./Store/store";
 import {changeMaxNumber, changeMinNumber, createStartNumber, InitialStateType} from "./Store/count-reducer";
+import { SettingInput } from './SettingsInput';
+import {Button} from "./Button";
 
 export function Settings() {
     const dispatch = useDispatch()
     const counter = useSelector<StateType, InitialStateType>(state => state.counter)
 
-    const changeMaxInput = (e: ChangeEvent<HTMLInputElement>) => {
-        dispatch(changeMaxNumber(Number(e.currentTarget.value)))
+    const changeMaxInput = (number: number) => {
+        dispatch(changeMaxNumber(number))
     }
 
-    const changeMinInput = (e: ChangeEvent<HTMLInputElement>) => {
-        dispatch(changeMinNumber(Number(e.currentTarget.value)))
+    const changeMinInput = (number: number) => {
+        dispatch(changeMinNumber(number))
     }
 
     const clickSettings = () => {
         dispatch(createStartNumber())
     }
+
+    const settingsDisabled = counter.minNumber < 0
+        || counter.minNumber >= counter.maxNumber
+        || counter.startNumber >= counter.minNumber
 
     const styleMinInput = {
         outline: "none",
@@ -32,38 +38,25 @@ export function Settings() {
         backgroundColor: counter.minNumber >= counter.maxNumber ? "orange" : '',
     }
 
-    const errorButton = counter.minNumber < 0
-        || counter.minNumber >= counter.maxNumber
-        || counter.startNumber >= counter.minNumber
-
     return (
         <div>
             <div className="AppInput">
-                <div className="AppInputMain">
-                    <div>
-                        max value:
-                    </div>
-                    <input style={styleMaxInput}
-                           onChange={changeMaxInput}
-                           value={counter.maxNumber}
-                           type="number"/>
-                </div>
-                <div className="AppInputMain">
-                    <div>
-                        start value:
-                    </div>
-                    <input style={styleMinInput}
-                           onChange={changeMinInput}
-                           value={counter.minNumber}
-                           type="number"/>
-                </div>
+                <SettingInput changeInput={changeMaxInput}
+                              title={'max value:'}
+                              style={styleMaxInput}
+                              number={counter.maxNumber}/>
+                <SettingInput changeInput={changeMinInput}
+                              title={'start value:'}
+                              style={styleMinInput}
+                              number={counter.minNumber}/>
             </div>
             <div className="AppButton">
-                <button className='ButtonItem'
-                        disabled={errorButton}
-                        onClick={clickSettings}>set
-                </button>
+                <Button funcButton={clickSettings}
+                        title={'set'}
+                        disableButton={settingsDisabled}
+                />
             </div>
         </div>
     )
 }
+

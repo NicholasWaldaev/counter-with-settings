@@ -4,6 +4,7 @@ import {Settings} from "./Settings";
 import {Count} from "./Count";
 
 function App() {
+
     return (
         <div className="App">
             <div className="AppItem">

@@ -33,7 +33,6 @@ type ActionType = ChangeMinNumberAT
     | IncrementStartNumberAT
     | EndStartNumberAT
 
-
 export type InitialStateType = {
     minNumber: number
     maxNumber: number

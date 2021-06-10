@@ -2,16 +2,18 @@ import React from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {StateType} from "./Store/store";
 import {endStartNumber, incrementStartNumber, InitialStateType} from "./Store/count-reducer";
+import {Button} from "./Button";
 
 export function Count() {
+    console.log('render count')
     const dispatch = useDispatch()
     const counter = useSelector<StateType, InitialStateType>(state => state.counter)
 
-    const incButtonHandler = () => {
+    const incButton = () => {
         dispatch(incrementStartNumber())
     }
 
-    const resetButtonHandler = () => {
+    const resetButton = () => {
         dispatch(endStartNumber())
     }
 
@@ -37,18 +39,22 @@ export function Count() {
             </div>
             <div className='AppButton'>
                 <div className='ButtonCount'>
-                    <button className='ButtonItem'
-                            disabled={incDisabled}
-                            onClick={incButtonHandler}>inc
-                    </button>
-                    <button className='ButtonItem'
-                            disabled={resetDisabled}
-                            onClick={resetButtonHandler}>reset
-                    </button>
+                    <Button funcButton={incButton}
+                            title={'inc'}
+                            disableButton={incDisabled}
+                    />
+                    <Button funcButton={resetButton}
+                            title={'reset'}
+                            disableButton={resetDisabled}
+                    />
                 </div>
             </div>
         </div>
     )
 }
+
+
+
+
 
 
